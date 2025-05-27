@@ -23,7 +23,7 @@ class TestView(TestCase):
             category=self.category_programing,
             author=self.user_guchuk
         )
-        self.post_002.tags.add(self.tag_hello)
+        self.post_001.tags.add(self.tag_hello)
         self.post_002 = Post.objects.create(
             title='두 번째 포스트입니다.',
             content='1등이 전부는 아니잖아요?',
@@ -178,6 +178,10 @@ class TestView(TestCase):
         # 2.5. 첫 번째 포스트의 작성자(author)가 포스트 영역에 있다(아직 구현할 수 없음).
         # 2.5. 첫 번째 포스트의 내용(content)이 포스트 영역에 있다. 
         self.assertIn(self.post_001.content, post_area.text)
+
+        self.assertIn(self.tag_hello.name, post_area.text)
+        self.assertNotIn(self.tag_python.name, post_area.text)
+        self.assertNotIn(self.tag_python_kor.name, post_area.text)
 
         self.assertIn(self.user_guchuk.username.upper(), main_area.text)
 
