@@ -11,7 +11,6 @@
 </head>
 <body>
     {% include 'blog/navbar.html' %}
-
     <div class="jumbotron jumbotron-fluid">
         <div class="media">
             <img src="{% static 'blog/image/modbus_logo.png' %}" style="width:10%; height:10%;" class="align-self-center mr-3" alt="...">
@@ -85,7 +84,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" style="width: 150px;">Register Value</span>
                         </div>
-                        <input type="text" class="form-control" placeholder="Value" aria-label="Value" aria-describedby="addon-wrapping" id="read_register_value">
+                        <input type="text" class="form-control" placeholder="" aria-label="Value" aria-describedby="addon-wrapping" id="read_register_result" readonly>
                     </div>
 
                     <button type="button" class="btn btn-secondary btn-lg btn-block" id="read_register">Read Register</button>
@@ -111,7 +110,7 @@
                             <span class="input-group-text" style="width: 150px;">Coil Value</span>
                         </div>
                         <select class="custom-select" id="coil_value">
-                            <option value="Ture">True</option>
+                            <option value="True">True</option>
                             <option value="False">False</option>
                         </select>
                     </div>
@@ -145,7 +144,7 @@
                         <input type="text" class="form-control" placeholder="" aria-label="Value" aria-describedby="addon-wrapping" id="read_coil_result" value="" readonly>
                     </div>
 
-                    <button type="button" class="btn btn-secondary btn-lg btn-block" id="read_register">Read Coil</button>
+                    <button type="button" class="btn btn-secondary btn-lg btn-block" id="read_coil">Read Coil</button>
                 </div>
             </div>
         </div>
@@ -164,7 +163,7 @@
                 var cookies = document.cookie.split(';');
                 for (var i = 0; i < cookies.length; i++) {
                     var cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '-')) {
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                         break;
                     }
@@ -240,7 +239,7 @@
                     console.log(response);
                 }
             };
-            const data = JSON.stringify({"mod": "writeCoil", "ipAddress": ipAddress, "registerAddress": coilAddress, "registerValue": coilValue});
+            const data = JSON.stringify({"mod": "writeCoil", "ipAddress": ipAddress, "coilAddress": coilAddress, "coilValue": coilValue});
             xhr.send(data);
         });
 
@@ -249,7 +248,7 @@
 
             const ipAddress = document.getElementById("ip_address").value;
             const firstAddress = document.getElementById("first_address").value;
-            const lastValue = document.getElementById("last_address").value;
+            const lastAddress = document.getElementById("last_address").value;
 
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "{% url 'modbus_data' %}");
@@ -265,7 +264,7 @@
                     console.log(response);
                 }
             };
-            const data = JSON.stringify({"mod": "readCoil", "ipAddress": ipAddress, "registerAddress": firstAddress, "registerValue": lastAddress});
+            const data = JSON.stringify({"mod": "readCoil", "ipAddress": ipAddress, "firstAddress": firstAddress, "lastAddress": lastAddress});
             xhr.send(data);
         });
     </script>

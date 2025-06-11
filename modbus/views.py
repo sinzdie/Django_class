@@ -27,9 +27,9 @@ def modbus_data(request):
             registerAddress = receiveData.get("registerAddress")
             registerValue = receiveData.get("registerValue")
 
-            client.write.register(int(registerAddress)-1, int(registerValue))
+            client.write_register(int(registerAddress)-1, int(registerValue))
         elif mod == "readRegister":
-            registerAddress = receiveData..get("registerAddress")
+            registerAddress = receiveData.get("registerAddress")
 
             result = client.read_holding_registers(int(registerAddress)-1, count=1)
             if not result.isError():
@@ -37,7 +37,7 @@ def modbus_data(request):
 
         elif mod == "writeCoil":
             coilAddress = receiveData.get("coilAddress")
-            coilValue = receiveData.get("coulValue")
+            coilValue = receiveData.get("coilValue") # 'coilValue'로 수정
 
             client.write_coil(int(coilAddress)-1, coilValue=="True")
 
@@ -46,14 +46,14 @@ def modbus_data(request):
             lastAddress = receiveData.get("lastAddress")
             readCount = int(lastAddress)-int(firstAddress)+1
 
-            result = client.read_coils(int(firstAddress)-1, readCount)
+            result = client.read_coils(int(firstAddress)-1, count=readCount)
             if not result.isError():
                 resultCoils = ", ".join(list(map(str, result.bits[:readCount])))
                 response_data["coils"] = resultCoils
 
         client.close()
 
-        response_data["messaage"] = "Modbus 통신이 완료되었습니다."
+        response_data["message"] = "Modbus 통신이 완료되었습니다." # 'message'로 수정
         return JsonResponse(response_data)
     else:
         return JsonResponse({"error": "잘못된 요청입니다."}, status=400)
